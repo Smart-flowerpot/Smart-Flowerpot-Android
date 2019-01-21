@@ -1,22 +1,19 @@
 package com.omer.user.smartflowerpot.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.omer.user.smartflowerpot.Adapters.PlantsAdapter;
 import com.omer.user.smartflowerpot.Models.Plant;
@@ -33,6 +30,9 @@ public class HomeFragment extends Fragment {
 
     @BindView(R.id.list)
     RecyclerView list;
+
+    @BindView(R.id.add_plant)
+    CardView add_plant;
 
     View view;
     private LinearLayoutManager linearLayoutManager;
@@ -51,7 +51,7 @@ public class HomeFragment extends Fragment {
         a.setStatus(70);
         a.setType("rose");
         p_list.add(a);
-        //fillList(p_list);
+        fillList(p_list);
         return view;
     }
 
@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.home_menu) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.frame, new MenuFragment(), "fragment_settings")
+                    .replace(R.id.frame, new SettingsFragment(), "fragment_settings")
                     .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .addToBackStack("settings")
                     .commit();

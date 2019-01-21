@@ -1,7 +1,5 @@
 package com.omer.user.smartflowerpot.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -12,23 +10,35 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.omer.user.smartflowerpot.Adapters.SettingsAdapter;
 import com.omer.user.smartflowerpot.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MenuFragment extends Fragment {
+public class SettingsFragment extends Fragment {
 
+    @BindView(R.id.settings_list)
+    ListView settings_item_list;
+
+    private SettingsAdapter settingsAdapter;
+    private List<String> list;
     View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_menu, container, false);
+        view = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         setActionBar();
+        setSettingsOptions();
         return view;
     }
 
@@ -51,6 +61,14 @@ public class MenuFragment extends Fragment {
     private void setActionBar() {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html
                 .fromHtml("<font style='align:center' color='#808080'> Settings </font>"));
+    }
+
+    private void setSettingsOptions() {
+        list = new ArrayList<>();
+        list.add("Notifications");
+        list.add("Open source libraries");
+        settingsAdapter = new SettingsAdapter(getActivity(), list, getFragmentManager());
+        settings_item_list.setAdapter(settingsAdapter);
     }
 
 }

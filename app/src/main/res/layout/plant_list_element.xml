@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
+        app:cardBackgroundColor="#ebd9c6"
         android:background="@color/cardview_dark_background"
         app:cardCornerRadius="10dp"
         app:cardElevation="10dp">
@@ -30,25 +31,29 @@
                 android:layout_height="100dp"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="3"
+                android:layout_gravity="center_vertical"
+                android:textAlignment="center"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/name"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="15dp"
-                    android:text="SAAAAAAAAAASFSF"
+                    android:layout_height="0dp"
                     android:textSize="15dp" />
 
                 <TextView
                     android:id="@+id/type"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="15dp"
+                    android:layout_height="0dp"
                     android:textSize="15dp" />
 
                 <TextView
                     android:id="@+id/status"
+                    android:layout_weight="1"
                     android:layout_width="match_parent"
-                    android:layout_height="15dp"
+                    android:layout_height="0dp"
                     android:textSize="15dp" />
 
             </LinearLayout>

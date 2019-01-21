@@ -2,16 +2,13 @@ package com.omer.user.smartflowerpot.Activities;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.FrameLayout;
 
 import com.omer.user.smartflowerpot.Fragments.HomeFragment;
 import com.omer.user.smartflowerpot.R;
-
-import butterknife.BindView;
 
 public class MainActivity extends AppCompatActivity {
 

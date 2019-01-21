@@ -6,11 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.omer.user.smartflowerpot.Models.Plant;
 import com.omer.user.smartflowerpot.R;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder> {
 
@@ -42,12 +46,28 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        @BindView(R.id.name)
+        TextView name;
+
+        @BindView(R.id.status)
+        TextView status;
+
+        @BindView(R.id.type)
+        TextView type;
+
+        View view;
+
         public ViewHolder(View itemView) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
+            view = itemView;
+            itemView.setOnClickListener(this);
         }
 
         public void setData(Plant plant, int position) {
-
+            name.setText(plant.getName());
+            status.setText(plant.getStatus() + "%");
+            type.setText(plant.getType());
         }
 
         @Override
