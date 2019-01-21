@@ -4,14 +4,19 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.omer.user.smartflowerpot.Adapters.PlantsAdapter;
 import com.omer.user.smartflowerpot.Models.Plant;
@@ -29,7 +34,7 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.list)
     RecyclerView list;
 
-    private View view;
+    View view;
     private LinearLayoutManager linearLayoutManager;
 
     @Override
@@ -37,6 +42,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
+        setHasOptionsMenu(true);
         setActionBar();
         List<Plant> p_list = new ArrayList<>();
         Plant a = new Plant();
@@ -45,8 +51,26 @@ public class HomeFragment extends Fragment {
         a.setStatus(70);
         a.setType("rose");
         p_list.add(a);
-        fillList(p_list);
+        //fillList(p_list);
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.home_settings, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.home_menu) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.frame, new MenuFragment(), "fragment_settings")
+                    .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .addToBackStack("settings")
+                    .commit();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setActionBar() {
@@ -60,7 +84,6 @@ public class HomeFragment extends Fragment {
             linearLayoutManager = new LinearLayoutManager(getContext());
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             this.list.setLayoutManager(linearLayoutManager);
-
         }
     }
 }
