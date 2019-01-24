@@ -1,13 +1,17 @@
 package com.omer.user.smartflowerpot.Adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.omer.user.smartflowerpot.Fragments.PlantFragment;
 import com.omer.user.smartflowerpot.Models.Plant;
 import com.omer.user.smartflowerpot.R;
 
@@ -72,7 +76,20 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
 
         @Override
         public void onClick(View view) {
+            final int position = getLayoutPosition();
+            Plant plant = list.get(position);
 
+            Bundle bundle = new Bundle();
+            bundle.putInt("id", plant.getId());
+
+            PlantFragment plantFragment = new PlantFragment();
+            plantFragment.setArguments(bundle);
+
+            ((FragmentActivity) view.getContext()).getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frame, plantFragment, "plant_fragment")
+                    .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .addToBackStack("plant")
+                    .commit();
         }
     }
 }
