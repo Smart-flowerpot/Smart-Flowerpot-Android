@@ -70,7 +70,6 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
 
         public void setData(Plant plant, int position) {
             name.setText(plant.getName());
-            status.setText(plant.getStatus() + "%");
             type.setText(plant.getType());
         }
 
@@ -80,7 +79,7 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
             Plant plant = list.get(position);
 
             Bundle bundle = new Bundle();
-            bundle.putInt("id", plant.getId());
+            bundle.putInt("id", plant.getPlant_id());
 
             PlantFragment plantFragment = new PlantFragment();
             plantFragment.setArguments(bundle);

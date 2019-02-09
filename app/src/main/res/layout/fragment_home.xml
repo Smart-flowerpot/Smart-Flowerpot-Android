@@ -7,59 +7,80 @@
     android:background="#f2e6d9"
     tools:context=".Fragments.HomeFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:background="@drawable/logo" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/list"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"></android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="10dp"
-            app:cardBackgroundColor="#ebd9c6"
-            android:id="@+id/add_plant"
-            android:alpha="0.8"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:background="@color/cardview_dark_background"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="10dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:background="@drawable/logo" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"></android.support.v7.widget.RecyclerView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/add_plant"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                android:alpha="0.8"
+                android:background="@color/cardview_dark_background"
+                app:cardBackgroundColor="#ebd9c6"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:alpha="0.5"
+                        android:text="+"
+                        android:textAlignment="center"
+                        android:textSize="60dp" />
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="+"
-                    android:alpha="0.5"
-                    android:layout_gravity="center_vertical"
-                    android:textSize="60dp"
-                    android:textAlignment="center"/>
+                <ImageView
+                    android:layout_width="50dp"
+                    android:background="@drawable/ic_iconfinder_cup_416372"
+                    android:layout_height="50dp" />
 
             </LinearLayout>
-        </android.support.v7.widget.CardView>
 
+        </LinearLayout>
+    </ScrollView>
 
-    </LinearLayout>
 
 </FrameLayout>

@@ -13,12 +13,28 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.omer.user.smartflowerpot.Models.Plant;
 import com.omer.user.smartflowerpot.R;
+import com.omer.user.smartflowerpot.RestApi.ManagerAll;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PlantFragment extends Fragment {
+
+    @BindView(R.id.value_light)
+    TextView light;
+
+    @BindView(R.id.value_moisture)
+    TextView moisture;
+
+    @BindView(R.id.value_temp)
+    TextView temperature;
 
     View view;
 
@@ -28,7 +44,7 @@ public class PlantFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_plant, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
-        setActionBar();
+        setPlant();
         return view;
     }
 
@@ -49,9 +65,28 @@ public class PlantFragment extends Fragment {
     }
 
 
-    private void setActionBar() {
+    private void setActionBar(String name) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html
-                .fromHtml("<font style='align:center' color='#808080'> Plant A </font>"));
+                .fromHtml("<font style='align:center' color='#808080'>" + name + "</font>"));
+    }
+
+    private void setPlant() {
+        ManagerAll.getInstance().getPlant(5).enqueue(new Callback<Plant>() {
+            @Override
+            public void onResponse(Call<Plant> call, Response<Plant> response) {
+                if (response.isSuccessful()) {
+                    setActionBar(response.body().getName());
+                    temperature.setText(response.body().getTemperature()+"");
+                    light.setText(response.body().getLight()+"");
+                    moisture.setText(response.body().getMoisture()+"");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Plant> call, Throwable t) {
+
+            }
+        });
     }
 
 }
