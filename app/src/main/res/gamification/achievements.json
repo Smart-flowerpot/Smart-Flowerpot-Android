@@ -5,7 +5,7 @@
       "achievementlist": [
         {
           "achievementname": "Water 5 Times In Total",
-          "points": "Y",
+          "points": "5",
           "status": "0"
         },
         {
@@ -25,12 +25,12 @@
         },
         {
           "achievementname": "Collect 5 Experience Points",
-          "points": "X/100",
+          "points": "10",
           "status": "0"
         },
         {
           "achievementname": "Check The Condition Of Your Plants 10 Times",
-          "points": "X",
+          "points": "20",
           "status": "0"
         }]
     }]
