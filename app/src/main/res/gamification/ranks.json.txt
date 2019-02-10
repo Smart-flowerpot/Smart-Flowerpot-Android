@@ -1,0 +1,96 @@
+{
+"allranks":[
+   {
+     "name": "list of all ranks",
+     "ranklist": [
+       {
+         "rankname": "Bronze III",
+         "minimum": 0,
+         "maximum": 500,
+         "current": "1"
+       },
+       {
+         "rankname": "Bronze II",
+         "minimum": 501,
+         "maximum": 1500,
+         "current": "0"
+       },
+       {
+         "rankname": "Bronze I",
+         "minimum": 1501,
+         "maximum": 3000,
+         "current": "0"
+       },
+       {
+         "rankname": "Silver III",
+         "minimum": 3001,
+         "maximum": 4000,
+         "current": "0"
+       },
+       {
+         "rankname": "Silver II",
+         "minimum": 4001,
+         "maximum": 5500,
+         "current": "0"
+       },
+       {
+         "rankname": "Silver I",
+         "minimum": 5501,
+         "maximum": 7500,
+         "current": "0"
+       },
+       {
+         "rankname": "Gold III",
+         "minimum": 7501,
+         "maximum": 9000,
+         "current": "0"
+       },
+       {
+         "rankname": "Gold II",
+         "minimum": 9001,
+         "maximum": 11000,
+         "current": "0"
+       },
+       {
+         "rankname": "Gold I",
+         "minimum": 11001,
+         "maximum": 13500,
+         "current": "0"
+       },
+       {
+         "rankname": "Platinium III",
+         "minimum": 13501,
+         "maximum": 15500,
+         "current": "0"
+       },
+       {
+         "rankname": "Plantinium II",
+         "minimum": 15501,
+         "maximum": 18000,
+         "current": "0"
+       },
+       {
+         "rankname": "Platinium I",
+         "minimum": 18001,
+         "maximum": 21000,
+         "current": "0"
+       },
+       {
+         "rankname": "Diamond III",
+         "minimum": 21001,
+         "maximum": 23500,
+         "current": "0"
+       },
+       {
+         "rankname": "Diamond II",
+         "minimum": 23501,
+         "maximum": 26500,
+         "current": "0"
+       },
+       {
+         "rankname": "Diamond I",
+         "minimum": 26501,
+         "current": "0"
+       }]
+    }]
+}
