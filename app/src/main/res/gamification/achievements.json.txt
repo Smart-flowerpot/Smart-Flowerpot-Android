@@ -5,7 +5,7 @@
       "achievementlist": [
         {
           "achievementname": "Water 5 Times In Total",
-          "experience": "Y",
+          "points": "Y",
           "status": "0"
         },
         {
