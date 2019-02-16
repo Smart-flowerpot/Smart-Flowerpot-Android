@@ -7,7 +7,9 @@ public class Plant {
     private String type;
     private int light;
     private int temperature;
-    private int moisture;
+    private int moisture_air;
+    private int moisture_soil;
+    private int frostbite;
     private int water;
 
     public int getPlant_id() {
@@ -42,12 +44,28 @@ public class Plant {
         this.temperature = temperature;
     }
 
-    public int getMoisture() {
-        return moisture;
+    public int getMoisture_air() {
+        return moisture_air;
     }
 
-    public void setMoisture(int moisture) {
-        this.moisture = moisture;
+    public void setMoisture_air(int moisture_air) {
+        this.moisture_air = moisture_air;
+    }
+
+    public int getMoisture_soil() {
+        return moisture_soil;
+    }
+
+    public void setMoisture_soil(int moisture_soil) {
+        this.moisture_soil = moisture_soil;
+    }
+
+    public int getFrostbite() {
+        return frostbite;
+    }
+
+    public void setFrostbite(int frostbite) {
+        this.frostbite = frostbite;
     }
 
     public int getWater() {

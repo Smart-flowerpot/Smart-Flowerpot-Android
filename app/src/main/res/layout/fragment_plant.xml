@@ -15,7 +15,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/temperature"
             android:layout_width="366dp"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -26,7 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.512"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/moisture">
+            app:layout_constraintTop_toBottomOf="@+id/moisture_soil">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,7 +73,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/moisture"
             android:layout_width="366dp"
-            android:layout_height="79dp"
+            android:layout_height="70dp"
             android:layout_margin="20dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -128,10 +128,11 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
+
         <android.support.v7.widget.CardView
             android:id="@+id/light"
             android:layout_width="367dp"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -185,14 +186,73 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:layout_width="370dp"
-            android:layout_height="80dp"
+            android:id="@+id/moisture_soil"
+            android:layout_width="366dp"
+            android:layout_height="70dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:clickable="true"
             android:layout_marginTop="24dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp"
+            app:layout_constraintBottom_toTopOf="@id/temperature"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.512"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/moisture">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_iconfinder_weather_12_2682839" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/value_moisture_soil"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:gravity="center_vertical"
+                        android:textAlignment="center"
+                        android:textSize="20dp" />
+
+                    <ImageView
+                        android:id="@+id/info_moisture_soil"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="23dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ic_info_black_24dp"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="370dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="8dp"
+            android:id="@+id/water"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:clickable="true"
             app:cardCornerRadius="5dp"
             app:cardElevation="5dp"
             app:layout_constraintEnd_toEndOf="parent"
