@@ -15,7 +15,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/temperature"
             android:layout_width="366dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -38,8 +38,9 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/ic_iconfinder_83_thermometer_three_quarter_full_183499" />
+                    android:layout_weight="0.7"
+                    android:background="@drawable/ic_iconfinder_83_thermometer_three_quarter_full_183499"
+                    android:tooltipText="Temperature" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -60,8 +61,8 @@
                         android:id="@+id/info_temp"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_margin="23dp"
-                        android:layout_weight="1"
+                        android:layout_margin="15dp"
+                        android:layout_weight="0.8"
                         android:background="@drawable/ic_info_black_24dp"
                         android:visibility="visible" />
 
@@ -73,7 +74,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/moisture"
             android:layout_width="366dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:layout_margin="20dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -97,8 +98,9 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/ic_iconfinder_weather_12_2682839" />
+                    android:layout_weight="0.7"
+                    android:background="@drawable/ic_iconfinder_weather_12_2682839"
+                    android:tooltipText="Air moisture" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -119,8 +121,8 @@
                         android:id="@+id/info_moisture"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_margin="23dp"
-                        android:layout_weight="1"
+                        android:layout_margin="15dp"
+                        android:layout_weight="0.8"
                         android:background="@drawable/ic_info_black_24dp"
                         android:visibility="visible" />
 
@@ -132,7 +134,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/light"
             android:layout_width="367dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -153,9 +155,9 @@
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-
-                    android:layout_weight="1"
-                    android:background="@drawable/ic_iconfinder_brightness_energy_glow_light_solar_sun_sunshine_2992431" />
+                    android:layout_weight="0.7"
+                    android:background="@drawable/ic_iconfinder_brightness_energy_glow_light_solar_sun_sunshine_2992431"
+                    android:tooltipText="Light" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -176,8 +178,8 @@
                         android:id="@+id/info_light"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_margin="23dp"
-                        android:layout_weight="1"
+                        android:layout_margin="15dp"
+                        android:layout_weight="0.8"
                         android:background="@drawable/ic_info_black_24dp"
                         android:visibility="visible" />
 
@@ -188,7 +190,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/moisture_soil"
             android:layout_width="366dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -212,8 +214,9 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/ic_iconfinder_weather_12_2682839" />
+                    android:layout_weight="0.7"
+                    android:background="@drawable/ic_iconfinder_weather_12_2682839"
+                    android:tooltipText="Soil moisture" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -234,8 +237,8 @@
                         android:id="@+id/info_moisture_soil"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_margin="23dp"
-                        android:layout_weight="1"
+                        android:layout_margin="15dp"
+                        android:layout_weight="0.8"
                         android:background="@drawable/ic_info_black_24dp"
                         android:visibility="visible" />
 
@@ -244,10 +247,10 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:layout_width="370dp"
-            android:layout_height="70dp"
-            android:layout_marginEnd="8dp"
             android:id="@+id/water"
+            android:layout_width="370dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.omer.user.smartflowerpot.Adapters.PlantsAdapter;
 import com.omer.user.smartflowerpot.Models.Plant;
 import com.omer.user.smartflowerpot.R;
+import com.omer.user.smartflowerpot.RestApi.ManagerAll;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,4 +84,5 @@ public class HomeFragment extends Fragment {
             this.list.setLayoutManager(linearLayoutManager);
         }
     }
+
 }
