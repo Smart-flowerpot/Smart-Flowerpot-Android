@@ -18,7 +18,6 @@ YAZILIM ICIN EKLENTILER
 
 - Alarm 
 
-![alt text align="center"](https://github.com/Smart-flowerpot/Smart-Flowerpot-Arduino/blob/master/smartFlowerpot.jpg) 
-
-
-
+<div align="center">
+<img src="https://github.com/Smart-flowerpot/Smart-Flowerpot-Android/blob/master/smartFlowerpot.jpg" />
+</div>
