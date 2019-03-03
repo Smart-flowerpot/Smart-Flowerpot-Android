@@ -1,7 +1,10 @@
 package com.omer.user.smartflowerpot.Fragments;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Html;
@@ -12,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +60,18 @@ public class PlantFragment extends Fragment {
     @BindView(R.id.light)
     CardView light_card;
 
+    @BindView(R.id.info_light)
+    ImageView info_light;
+
+    @BindView(R.id.info_moisture)
+    ImageView info_moisture;
+
+    @BindView(R.id.info_moisture_soil)
+    ImageView info_moisture_soil;
+
+    @BindView(R.id.info_temp)
+    ImageView info_temp;
+
     View view;
 
     @Override
@@ -97,10 +113,10 @@ public class PlantFragment extends Fragment {
             public void onResponse(Call<Plant> call, final Response<Plant> response) {
                 if (response.isSuccessful()) {
                     setActionBar(response.body().getName());
-                    temperature.setText(response.body().getTemperature() + "");
-                    light.setText(("%" + (response.body().getLight() * 100 / 1024)) + "");
-                    moisture.setText("%" + response.body().getMoisture_air());
-                    moisture_soil.setText("%" + response.body().getMoisture_soil());
+                    temperature.setText(response.body().getTemperature() + " °C");
+                    light.setText(((response.body().getLight() * 100 / 1024)) + "%");
+                    moisture.setText(response.body().getMoisture_air() + "%");
+                    moisture_soil.setText(response.body().getMoisture_soil() + "%");
 
                     checkPlantStatus(response.body().getType());
 
@@ -134,12 +150,66 @@ public class PlantFragment extends Fragment {
     }
 
     private void checkPlantStatus(final String plant_type) {
-        final ArrayItem[] arrayItem = new ArrayItem[1];
         ManagerAll.getInstance().getConstantPlantData().enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
                 if (response.isSuccessful()) {
-                    Log.i("error", response.body().getArray().toString());
+                    for (final ArrayItem p : response.body().getArray())
+                        if (p.getName().equalsIgnoreCase(plant_type)) {
+
+                            int temp_dif = Integer.parseInt(p.getOptimal_temperature()) -
+                                    Integer.parseInt(temperature.getText().toString().substring(0,temperature.getText().toString().indexOf(" ")));
+                            int moisture_dif = Integer.parseInt(p.getOptimal_moisture()) -
+                                    Integer.parseInt(moisture.getText().toString().substring(0, moisture.getText().toString().indexOf("%")));
+
+                            info_moisture.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                    builder.setTitle("Moisture information");
+                                    builder.setMessage("Current moisture: " + moisture.getText().toString() + "\n" +
+                                    "Ideal moisture: " + p.getOptimal_moisture() + "%");
+                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                        }
+                                    }).show();
+                                }
+                            });
+
+                            info_temp.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                    builder.setTitle("Temperature information");
+                                    builder.setMessage("Current temperature: " + temperature.getText().toString() + "\n" +
+                                            "Ideal temperature: " + p.getOptimal_temperature() + " °C");
+                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                        }
+                                    }).show();
+                                }
+                            });
+
+                            if (temp_dif < -3) {
+                                temperature_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+
+                            } else if (temp_dif > 3) {
+                                temperature_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+                            }
+
+                            if (moisture_dif < -3) {
+                                moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+
+                            } else if (moisture_dif > 3) {
+                                moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+                            }
+                        }
+
+
                 } else
                     Log.i("Error", response.errorBody().toString());
             }

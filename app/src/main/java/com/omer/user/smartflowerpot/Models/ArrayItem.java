@@ -1,51 +1,50 @@
 package com.omer.user.smartflowerpot.Models;
 
 public class ArrayItem{
-	private String optimalTemperature;
-	private String optimalLight;
+	private String optimal_temperature;
+	private String optimal_light;
 	private String name;
-	private String optimalMoisture;
+	private String optimal_moisture;
 
-	public void setOptimalTemperature(String optimalTemperature){
-		this.optimalTemperature = optimalTemperature;
+	public String getOptimal_temperature() {
+		return optimal_temperature;
 	}
 
-	public String getOptimalTemperature(){
-		return optimalTemperature;
+	public void setOptimal_temperature(String optimal_temperature) {
+		this.optimal_temperature = optimal_temperature;
 	}
 
-	public void setOptimalLight(String optimalLight){
-		this.optimalLight = optimalLight;
+	public String getOptimal_light() {
+		return optimal_light;
 	}
 
-	public String getOptimalLight(){
-		return optimalLight;
+	public void setOptimal_light(String optimal_light) {
+		this.optimal_light = optimal_light;
 	}
 
-	public void setName(String name){
-		this.name = name;
-	}
-
-	public String getName(){
+	public String getName() {
 		return name;
 	}
 
-	public void setOptimalMoisture(String optimalMoisture){
-		this.optimalMoisture = optimalMoisture;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getOptimalMoisture(){
-		return optimalMoisture;
+	public String getOptimal_moisture() {
+		return optimal_moisture;
+	}
+
+	public void setOptimal_moisture(String optimal_moisture) {
+		this.optimal_moisture = optimal_moisture;
 	}
 
 	@Override
- 	public String toString(){
-		return 
-			"ArrayItem{" + 
-			"optimal_temperature = '" + optimalTemperature + '\'' + 
-			",optimal_light = '" + optimalLight + '\'' + 
-			",name = '" + name + '\'' + 
-			",optimal_moisture = '" + optimalMoisture + '\'' + 
-			"}";
-		}
+	public String toString() {
+		return "ArrayItem{" +
+				"optimal_temperature='" + optimal_temperature + '\'' +
+				", optimal_light='" + optimal_light + '\'' +
+				", name='" + name + '\'' +
+				", optimal_moisture='" + optimal_moisture + '\'' +
+				'}';
+	}
 }
