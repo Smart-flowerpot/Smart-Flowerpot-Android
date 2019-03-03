@@ -3,6 +3,7 @@ package com.omer.user.smartflowerpot.Fragments;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -195,17 +196,22 @@ public class PlantFragment extends Fragment {
                             });
 
                             if (temp_dif < -3) {
-                                temperature_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+                                alert(temperature_card);
+                              //  temperature_card.setCardBackgroundColor(Color.parseColor("#F32222"));
 
                             } else if (temp_dif > 3) {
-                                temperature_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+                                alert(temperature_card);
+
+                              //  temperature_card.setCardBackgroundColor(Color.parseColor("#F32222"));
                             }
 
                             if (moisture_dif < -3) {
-                                moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+                                alert(moisture_card);
+                              //  moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
 
                             } else if (moisture_dif > 3) {
-                                moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+                                alert(moisture_card);
+                              //  moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
                             }
                         }
 
@@ -220,6 +226,25 @@ public class PlantFragment extends Fragment {
             }
         });
 
+    }
+
+    private void alert(final CardView temp_card) {
+        final int[] i = {0};
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run()
+            {
+                if(i[0] %2==0)
+                    temp_card.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                if(i[0] %2 == 1)
+                    temp_card.setBackgroundColor(Color.parseColor("#FE2E2E"));
+                i[0]++;
+                temp_card.invalidate();
+                handler.postDelayed(this, 1000);
+            }
+        };
+        handler.postDelayed(runnable, 1000);
     }
 
 

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.omer.user.smartflowerpot.Fragments.HomeFragment;
 import com.omer.user.smartflowerpot.R;
+import com.onesignal.OneSignal;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         homeFragment();
         configureActionBar();
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .init();
     }
 
     private void changeFragment(Fragment fragment, String tag) {
