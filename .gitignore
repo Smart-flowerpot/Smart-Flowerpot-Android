@@ -8,5 +8,5 @@
 /build
 /captures
 .externalNativeBuild
-C:\Users\User\SmartFlowerpot\app\build.gradle
-C:\Users\User\SmartFlowerpot\app\google-services.json
+app/google-services.json
+app/build.gradle
