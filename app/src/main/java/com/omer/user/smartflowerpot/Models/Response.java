@@ -2,13 +2,13 @@ package com.omer.user.smartflowerpot.Models;
 
 public class Response {
 
-    private String respone;
+    private String response;
 
-    public String getRespone() {
-        return respone;
+    public String getResponse() {
+        return response;
     }
 
-    public void setRespone(String respone) {
-        this.respone = respone;
+    public void setResponse(String response) {
+        this.response = response;
     }
 }

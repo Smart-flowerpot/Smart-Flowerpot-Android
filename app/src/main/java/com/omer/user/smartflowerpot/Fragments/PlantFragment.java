@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.omer.user.smartflowerpot.Models.ArrayItem;
 import com.omer.user.smartflowerpot.Models.Plant;
 import com.omer.user.smartflowerpot.Models.Result;
 import com.omer.user.smartflowerpot.R;
@@ -42,6 +44,18 @@ public class PlantFragment extends Fragment {
     @BindView(R.id.water)
     CardView water;
 
+    @BindView(R.id.moisture)
+    CardView moisture_card;
+
+    @BindView(R.id.moisture_soil)
+    CardView moisture_soil_card;
+
+    @BindView(R.id.temperature)
+    CardView temperature_card;
+
+    @BindView(R.id.light)
+    CardView light_card;
+
     View view;
 
     @Override
@@ -51,6 +65,7 @@ public class PlantFragment extends Fragment {
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         setPlant();
+
         return view;
     }
 
@@ -87,19 +102,21 @@ public class PlantFragment extends Fragment {
                     moisture.setText("%" + response.body().getMoisture_air());
                     moisture_soil.setText("%" + response.body().getMoisture_soil());
 
+                    checkPlantStatus(response.body().getType());
+
                     water.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            ManagerAll.getInstance().updateWaterStatus(response.body().getPlant_id(), 1).enqueue(new Callback<Result>() {
+                            ManagerAll.getInstance().updateWaterStatus(response.body().getPlant_id(), 1).enqueue(new Callback<com.omer.user.smartflowerpot.Models.Response>() {
                                 @Override
-                                public void onResponse(Call<Result> call, Response<Result> response) {
-                                    if (response.isSuccessful()) {
+                                public void onResponse(Call<com.omer.user.smartflowerpot.Models.Response> call, Response<com.omer.user.smartflowerpot.Models.Response> response) {
+                                    if (response.isSuccessful() && response.body().getResponse().equalsIgnoreCase("S")) {
                                         Toast.makeText(getContext(), "You watered your plant :)", Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
                                 @Override
-                                public void onFailure(Call<Result> call, Throwable t) {
+                                public void onFailure(Call<com.omer.user.smartflowerpot.Models.Response> call, Throwable t) {
 
                                 }
                             });
@@ -115,5 +132,25 @@ public class PlantFragment extends Fragment {
             }
         });
     }
+
+    private void checkPlantStatus(final String plant_type) {
+        final ArrayItem[] arrayItem = new ArrayItem[1];
+        ManagerAll.getInstance().getConstantPlantData().enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                if (response.isSuccessful()) {
+                    Log.i("error", response.body().getArray().toString());
+                } else
+                    Log.i("Error", response.errorBody().toString());
+            }
+
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                Log.i("Error", t.getMessage());
+            }
+        });
+
+    }
+
 
 }
