@@ -2,6 +2,7 @@ package com.omer.user.smartflowerpot.RestApi;
 
 import com.omer.user.smartflowerpot.Models.Plant;
 import com.omer.user.smartflowerpot.Models.Response;
+import com.omer.user.smartflowerpot.Models.Result;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -19,5 +20,7 @@ public interface RestApi {
     @POST("update_water_engine.php")
     Call<Response> updateWaterStatus(@Field("plant_id") int plant_id, @Field("water") int value);
 
+    @GET("plantdata.json")
+    Call<Result> getConstantPlantData();
 }
 

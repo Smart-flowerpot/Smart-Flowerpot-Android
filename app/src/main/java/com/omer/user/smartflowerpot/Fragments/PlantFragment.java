@@ -1,10 +1,7 @@
 package com.omer.user.smartflowerpot.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.Html;
@@ -18,12 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.omer.user.smartflowerpot.Models.Plant;
+import com.omer.user.smartflowerpot.Models.Result;
 import com.omer.user.smartflowerpot.R;
 import com.omer.user.smartflowerpot.RestApi.ManagerAll;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -93,16 +90,16 @@ public class PlantFragment extends Fragment {
                     water.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            ManagerAll.getInstance().updateWaterStatus(response.body().getPlant_id(), 1).enqueue(new Callback<com.omer.user.smartflowerpot.Models.Response>() {
+                            ManagerAll.getInstance().updateWaterStatus(response.body().getPlant_id(), 1).enqueue(new Callback<Result>() {
                                 @Override
-                                public void onResponse(Call<com.omer.user.smartflowerpot.Models.Response> call, Response<com.omer.user.smartflowerpot.Models.Response> response) {
+                                public void onResponse(Call<Result> call, Response<Result> response) {
                                     if (response.isSuccessful()) {
                                         Toast.makeText(getContext(), "You watered your plant :)", Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
                                 @Override
-                                public void onFailure(Call<com.omer.user.smartflowerpot.Models.Response> call, Throwable t) {
+                                public void onFailure(Call<Result> call, Throwable t) {
 
                                 }
                             });

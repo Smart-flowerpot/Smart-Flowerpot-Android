@@ -2,8 +2,7 @@ package com.omer.user.smartflowerpot.RestApi;
 
 import com.omer.user.smartflowerpot.Models.Plant;
 import com.omer.user.smartflowerpot.Models.Response;
-
-import javax.xml.transform.Result;
+import com.omer.user.smartflowerpot.Models.Result;
 
 import retrofit2.Call;
 
@@ -25,5 +24,8 @@ public class ManagerAll extends BaseManager {
         return call;
     }
 
-
+    public Call<Result> getConstantPlantData() {
+        Call<Result> call = getRestApiClient().getConstantPlantData();
+        return call;
+    }
 }
