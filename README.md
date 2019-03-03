@@ -2,13 +2,13 @@
 
 YAZILIM - Android
 
-- Sunucu üzerinden donanım ile etkileşim
+- Sunucu üzerinden donanım ile etkileşim (PHP, MySQL)
 
-- Arayüz tasarımı
+- Arayüz tasarımı (Android)
 
-- Verilerin işlenmesi
+- Verilerin işlenmesi (Android)
 
-- Bildirim sağlanması
+- Bildirim sağlanması (OneSignal Push Notifications)
 
 YAZILIM ICIN EKLENTILER
 
