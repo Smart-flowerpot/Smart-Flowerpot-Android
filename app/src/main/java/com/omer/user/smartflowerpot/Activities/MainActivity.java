@@ -1,5 +1,8 @@
 package com.omer.user.smartflowerpot.Activities;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -9,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.omer.user.smartflowerpot.Fragments.HomeFragment;
 import com.omer.user.smartflowerpot.R;
+import com.omer.user.smartflowerpot.Services.NotificationService;
 import com.onesignal.OneSignal;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +27,25 @@ public class MainActivity extends AppCompatActivity {
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();
+        checkService();
+    }
+
+    private void checkService(){
+        if (!isServiceOn()) {
+            Intent intent = new Intent(getApplicationContext(), NotificationService.class);
+            //intent.putExtra("id", getIntent().getStringExtra("id").toString());
+            startService(intent);
+        }
+    }
+
+    public boolean isServiceOn() {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (NotificationService.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void changeFragment(Fragment fragment, String tag) {

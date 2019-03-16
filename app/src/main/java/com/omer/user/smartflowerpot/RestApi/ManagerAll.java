@@ -28,4 +28,9 @@ public class ManagerAll extends BaseManager {
         Call<Result> call = getRestApiClient().getConstantPlantData();
         return call;
     }
+
+    public Call<Response> sendNotification(String message){
+        Call<Response> call = getRestApiClient().sendNotification(message);
+        return call;
+    }
 }

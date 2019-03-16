@@ -22,5 +22,8 @@ public interface RestApi {
 
     @GET("plantdata.json")
     Call<Result> getConstantPlantData();
+
+    @GET("send_notification.php")
+    Call<Response> sendNotification(@Query("message") String message);
 }
 
