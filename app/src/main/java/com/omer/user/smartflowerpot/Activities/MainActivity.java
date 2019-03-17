@@ -15,6 +15,14 @@ import com.omer.user.smartflowerpot.R;
 import com.omer.user.smartflowerpot.Services.NotificationService;
 import com.onesignal.OneSignal;
 
+import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttToken;
+
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -30,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         checkService();
     }
 
-    private void checkService(){
+
+    private void checkService() {
         if (!isServiceOn()) {
             Intent intent = new Intent(getApplicationContext(), NotificationService.class);
             //intent.putExtra("id", getIntent().getStringExtra("id").toString());
