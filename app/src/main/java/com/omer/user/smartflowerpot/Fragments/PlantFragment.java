@@ -36,6 +36,7 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.io.UnsupportedEncodingException;
 
@@ -87,6 +88,7 @@ public class PlantFragment extends Fragment {
     ImageView info_temp;
 
     View view;
+    private final MemoryPersistence persistence = new MemoryPersistence();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -172,21 +174,41 @@ public class PlantFragment extends Fragment {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
                 if (response.isSuccessful()) {
-                    for (final ArrayItem p : response.body().getArray())
+                    for (final ArrayItem p : response.body().getArray()) {
+                        Log.i("ö", p.getName());
                         if (p.getName().equalsIgnoreCase(plant_type)) {
 
                             int temp_dif = Integer.parseInt(p.getOptimal_temperature()) -
                                     Integer.parseInt(temperature.getText().toString().substring(0, temperature.getText().toString().indexOf(" ")));
                             int moisture_dif = Integer.parseInt(p.getOptimal_moisture()) -
                                     Integer.parseInt(moisture.getText().toString().substring(0, moisture.getText().toString().indexOf("%")));
+                            int moisture_air_dif = Integer.parseInt(p.getOptimal_moisture_soil()) -
+                                    Integer.parseInt(moisture_soil.getText().toString().substring(0, moisture_soil.getText().toString().indexOf("%")));
 
                             info_moisture.setOnClickListener(new View.OnClickListener() {
+
                                 @Override
                                 public void onClick(View view) {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                    builder.setTitle("Moisture information");
-                                    builder.setMessage("Current moisture: " + moisture.getText().toString() + "\n" +
-                                            "Ideal moisture: " + p.getOptimal_moisture() + "%");
+                                    builder.setTitle("Air moisture information");
+                                    builder.setMessage("Current air moisture: " + moisture.getText().toString() + "\n" +
+                                            "Ideal air moisture: " + p.getOptimal_moisture() + "%");
+                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.dismiss();
+                                        }
+                                    }).show();
+                                }
+                            });
+
+                            info_moisture_soil.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                    builder.setTitle("Soil moisture information");
+                                    builder.setMessage("Current soil moisture: " + moisture_soil.getText().toString() + "\n" +
+                                            "Ideal soil moisture: " + p.getOptimal_moisture_soil() + "%");
                                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -230,8 +252,17 @@ public class PlantFragment extends Fragment {
                                 alert(moisture_card);
                                 //  moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
                             }
-                        }
 
+                            if (moisture_air_dif < -3) {
+                                alert(moisture_soil_card);
+                                //  moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+
+                            } else if (moisture_air_dif > 3) {
+                                alert(moisture_soil_card);
+                                //  moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+                            }
+                        }
+                    }
 
                 } else
                     Log.i("Error", response.errorBody().toString());
@@ -268,116 +299,165 @@ public class PlantFragment extends Fragment {
 
         String clientId = MqttClient.generateClientId();
         final MqttAndroidClient client = new MqttAndroidClient(getActivity(), "tcp://m24.cloudmqtt.com:16309",
-                clientId);
+                clientId, persistence);
 
-        MqttConnectOptions options = new MqttConnectOptions();
-        options.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1);
-        options.setCleanSession(false);
-        options.setUserName("cissktzx");
-        options.setPassword("ETUpXfdiWfMO".toCharArray());
+        client.setCallback(new MqttCallback() {
+            @Override
+            public void connectionLost(Throwable cause) {
+                Log.i("ö", "Connection was lost!");
+            }
+
+            @Override
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                if (topic.equals("toprakNem")) {
+                    String m_soil = new String(message.getPayload());
+                    moisture_soil.setText(m_soil + "%");
+                }
+
+                if (topic.equals("havaNem")) {
+                    String m_air = new String(message.getPayload());
+                    moisture.setText(m_air + "%");
+                }
+
+                if (topic.equals("havaIsi")) {
+                    String temp = new String(message.getPayload());
+                    temperature.setText(temp + " °C");
+                }
+
+                checkPlantStatus("Amaryllis");
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+                Log.i("ö", "Delivery Complete!");
+            }
+        });
+
+        MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
+        mqttConnectOptions.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1);
+        mqttConnectOptions.setUserName("cissktzx");
+        mqttConnectOptions.setPassword("ETUpXfdiWfMO".toCharArray());
+        mqttConnectOptions.setCleanSession(true);
 
         try {
-            IMqttToken token = client.connect(options);
-            token.setActionCallback(new IMqttActionListener() {
+            client.connect(mqttConnectOptions, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    subscribe(client, "toprakNem");
-                    subscribe(client, "havaNem");
-                    subscribe(client, "havaIsi");
+                    Log.i("ö", "Connection Success!");
+                    try {
+                        client.subscribe("toprakNem", 0);
+                        client.subscribe("havaNem", 0);
+                        client.subscribe("havaIsi", 0);
 
-                    publish(client, "led", "1");
-
-                    water.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Log.i("ö", "watered");
-                            publish(client, "motor", "1");
-                        }
-                    });
-
-                    client.setCallback(new MqttCallback() {
-                        @Override
-                        public void connectionLost(Throwable cause) {
-                            Log.i("ö", cause.getMessage().toString());
-                        }
-
-                        @Override
-                        public void messageArrived(String topic, MqttMessage message) throws Exception {
-
-                            Log.i("ö", topic.toString());
-                            if (topic.equals("toprakNem")) {
-                                moisture_soil.setText(message.getPayload().toString());
+                        water.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                try {
+                                    client.publish("motor", new MqttMessage("1".getBytes()));
+                                    Toast.makeText(getContext(), "You watered your plant :)", Toast.LENGTH_SHORT).show();
+                                } catch (MqttException e) {
+                                    e.printStackTrace();
+                                }
                             }
+                        });
 
-                            if (topic.equals("havaNem")) {
-                                moisture.setText(message.getPayload().toString());
-                            }
+                    } catch (MqttException ex) {
 
-                            if (topic.equals("havaIsi")) {
-                                temperature.setText(message.getPayload().toString());
-                            }
-
-                        }
-
-                        @Override
-                        public void deliveryComplete(IMqttDeliveryToken token) {
-                            try {
-                                Log.i("ö", token.getMessage().toString());
-                            } catch (MqttException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    }
                 }
 
                 @Override
                 public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                    // Something went wrong e.g. connection timeout or firewall problems
-                    Log.i("ö", "onFailure");
-
-                }
-
-
-            });
-        } catch (MqttException e) {
-            Log.i("ö", e.getMessage().toString());
-        }
-    }
-
-    public void publish(MqttAndroidClient client, String topic, String payload) {
-        byte[] encodedPayload = new byte[0];
-        try {
-            encodedPayload = payload.getBytes("UTF-8");
-            MqttMessage message = new MqttMessage(encodedPayload);
-            client.publish(topic, message);
-        } catch (UnsupportedEncodingException | MqttException e) {
-            Log.i("ö", e.getMessage().toString());
-        }
-    }
-
-
-    public void subscribe(MqttAndroidClient client, String topic) {
-        int qos = 1;
-        try {
-            IMqttToken subToken = client.subscribe(topic, qos);
-            subToken.setActionCallback(new IMqttActionListener() {
-
-                @Override
-                public void onSuccess(IMqttToken asyncActionToken) {
-                    // The message was published
-                }
-
-                @Override
-                public void onFailure(IMqttToken asyncActionToken,
-                                      Throwable exception) {
-                    // The subscription could not be performed, maybe the user was not
-                    // authorized to subscribe on the specified topic e.g. using wildcards
+                    Log.i("ö", "Connection Failure!");
+                    Log.i("ö", "throwable: " + exception.toString());
                 }
             });
+        } catch (MqttException ex) {
+            Log.i("ö", ex.toString());
+        }
+
+
+       /* String clientId = MqttClient.generateClientId();
+        final MqttAndroidClient client = new MqttAndroidClient(getActivity(), "http://m24.cloudmqtt.com:16309",
+                clientId);
+
+        MqttConnectOptions options = new MqttConnectOptions();
+        options.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1);
+        options.setCleanSession(true);
+        options.setUserName("cissktzx");
+        options.setPassword("ETUpXfdiWfMO".toCharArray());
+        options.setAutomaticReconnect(true);
+
+
+        try {
+            IMqttToken token = client.connect(options);
+            if (client.isConnected()) {
+                token.setActionCallback(new IMqttActionListener() {
+                    @Override
+                    public void onSuccess(IMqttToken asyncActionToken) {
+                        subscribe(client, "toprakNem");
+                        subscribe(client, "havaNem");
+                        subscribe(client, "havaIsi");
+
+                        publish(client, "led", "1");
+
+                        water.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Log.i("ö", "watered");
+                                publish(client, "motor", "1");
+                            }
+                        });
+
+                        client.setCallback(new MqttCallback() {
+                            @Override
+                            public void connectionLost(Throwable cause) {
+                                Log.i("ö", cause.getMessage().toString());
+                            }
+
+                            @Override
+                            public void messageArrived(String topic, MqttMessage message) throws Exception {
+
+                                Log.i("ö", topic.toString());
+                                if (topic.equals("toprakNem")) {
+                                    moisture_soil.setText(message.getPayload().toString());
+                                }
+
+                                if (topic.equals("havaNem")) {
+                                    moisture.setText(message.getPayload().toString());
+                                }
+
+                                if (topic.equals("havaIsi")) {
+                                    temperature.setText(message.getPayload().toString());
+                                }
+
+                            }
+
+                            @Override
+                            public void deliveryComplete(IMqttDeliveryToken token) {
+                                try {
+                                    Log.i("ö", token.getMessage().toString());
+                                } catch (MqttException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                        // Something went wrong e.g. connection timeout or firewall problems
+                        Log.i("ö", "onFailure");
+
+                    }
+
+
+                });
+            } else
+                Log.i("ö", "not connected");
         } catch (MqttException e) {
             Log.i("ö", e.getMessage().toString());
-        }
+        }*/
     }
-
 
 }
