@@ -60,6 +60,9 @@ public class PlantFragment extends Fragment {
     @BindView(R.id.value_temp)
     TextView temperature;
 
+    @BindView(R.id.value_freeze)
+    TextView freeze;
+
     @BindView(R.id.water)
     CardView water;
 
@@ -75,6 +78,12 @@ public class PlantFragment extends Fragment {
     @BindView(R.id.light)
     CardView light_card;
 
+    @BindView(R.id.freeze)
+    CardView freeze_card;
+
+    @BindView(R.id.info_freeze)
+    ImageView info_freeze;
+
     @BindView(R.id.info_light)
     ImageView info_light;
 
@@ -86,6 +95,9 @@ public class PlantFragment extends Fragment {
 
     @BindView(R.id.info_temp)
     ImageView info_temp;
+
+    @BindView(R.id.water_me_text)
+    TextView water_me_text;
 
     View view;
     private final MemoryPersistence persistence = new MemoryPersistence();
@@ -289,7 +301,7 @@ public class PlantFragment extends Fragment {
                     temp_card.setBackgroundColor(Color.parseColor("#FE2E2E"));
                 i[0]++;
                 temp_card.invalidate();
-                handler.postDelayed(this, 1000);
+                handler.postDelayed(this, 3000);
             }
         };
         handler.postDelayed(runnable, 1000);
@@ -309,19 +321,26 @@ public class PlantFragment extends Fragment {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                if (topic.equals("toprakNem")) {
-                    String m_soil = new String(message.getPayload());
+                if (topic.equals("sensorler")) {
+                    String m_soil = "";
+                    String m_air = "";
+                    String temp = "";
+                    String frostbite = "";
+
+                    try {
+                        String[] data = (new String(message.getPayload())).split(",");
+                        m_soil = data[0];
+                        m_air = data[1];
+                        temp = data[2];
+                        frostbite = data[3];
+                    } catch (Exception e) {
+
+                    }
+
                     moisture_soil.setText(m_soil + "%");
-                }
-
-                if (topic.equals("havaNem")) {
-                    String m_air = new String(message.getPayload());
                     moisture.setText(m_air + "%");
-                }
-
-                if (topic.equals("havaIsi")) {
-                    String temp = new String(message.getPayload());
                     temperature.setText(temp + " °C");
+                    freeze.setText(frostbite);
                 }
 
                 checkPlantStatus("Amaryllis");
@@ -345,16 +364,20 @@ public class PlantFragment extends Fragment {
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.i("ö", "Connection Success!");
                     try {
-                        client.subscribe("toprakNem", 0);
-                        client.subscribe("havaNem", 0);
-                        client.subscribe("havaIsi", 0);
+                        client.subscribe("sensorler", 0);
 
                         water.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 try {
-                                    client.publish("motor", new MqttMessage("1".getBytes()));
-                                    Toast.makeText(getContext(), "You watered your plant :)", Toast.LENGTH_SHORT).show();
+                                    if (water_me_text.getText().toString().equalsIgnoreCase("Water me")) {
+                                        client.publish("motor", new MqttMessage("1".getBytes()));
+                                        water_me_text.setText("Stop watering");
+                                    } else if (water_me_text.getText().toString().equalsIgnoreCase("Stop watering")) {
+                                        Toast.makeText(getContext(), "You watered your plant :)", Toast.LENGTH_SHORT).show();
+                                        client.publish("motor", new MqttMessage("0".getBytes()));
+                                        water_me_text.setText("Water me");
+                                    }
                                 } catch (MqttException e) {
                                     e.printStackTrace();
                                 }
