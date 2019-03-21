@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private void checkService() {
         if (!isServiceOn()) {
             Intent intent = new Intent(getApplicationContext(), NotificationService.class);
-            //intent.putExtra("id", getIntent().getStringExtra("id").toString());
             startService(intent);
         }
     }

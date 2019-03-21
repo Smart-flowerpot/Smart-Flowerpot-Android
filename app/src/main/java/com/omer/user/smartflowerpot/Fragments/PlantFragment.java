@@ -1,10 +1,13 @@
 package com.omer.user.smartflowerpot.Fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -39,6 +42,9 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,8 +54,11 @@ import retrofit2.Response;
 
 public class PlantFragment extends Fragment {
 
-    @BindView(R.id.value_light)
-    TextView light;
+    @BindView(R.id.game)
+    ImageView game;
+
+    @BindView(R.id.stats)
+    ImageView stats;
 
     @BindView(R.id.value_moisture)
     TextView moisture;
@@ -75,17 +84,11 @@ public class PlantFragment extends Fragment {
     @BindView(R.id.temperature)
     CardView temperature_card;
 
-    @BindView(R.id.light)
-    CardView light_card;
-
     @BindView(R.id.freeze)
     CardView freeze_card;
 
     @BindView(R.id.info_freeze)
     ImageView info_freeze;
-
-    @BindView(R.id.info_light)
-    ImageView info_light;
 
     @BindView(R.id.info_moisture)
     ImageView info_moisture;
@@ -110,6 +113,9 @@ public class PlantFragment extends Fragment {
         setHasOptionsMenu(true);
         connect();
         setPlant();
+        openGame();
+        openStats();
+        setActionBar("Plant 1");
         return view;
     }
 
@@ -129,6 +135,31 @@ public class PlantFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private void openGame() {
+        game.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.frame, new GameFragment(), "fragment_settings")
+                        .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .addToBackStack("game")
+                        .commit();
+            }
+        });
+    }
+
+    private void openStats() {
+        stats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.frame, new StatsFragment(), "fragment_settings")
+                        .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .addToBackStack("stats")
+                        .commit();
+            }
+        });
+    }
 
     private void setActionBar(String name) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html
@@ -194,7 +225,7 @@ public class PlantFragment extends Fragment {
                                     Integer.parseInt(temperature.getText().toString().substring(0, temperature.getText().toString().indexOf(" ")));
                             int moisture_dif = Integer.parseInt(p.getOptimal_moisture()) -
                                     Integer.parseInt(moisture.getText().toString().substring(0, moisture.getText().toString().indexOf("%")));
-                            int moisture_air_dif = Integer.parseInt(p.getOptimal_moisture_soil()) -
+                            int moisture_soil_dif = Integer.parseInt(p.getOptimal_moisture_soil()) -
                                     Integer.parseInt(moisture_soil.getText().toString().substring(0, moisture_soil.getText().toString().indexOf("%")));
 
                             info_moisture.setOnClickListener(new View.OnClickListener() {
@@ -265,11 +296,11 @@ public class PlantFragment extends Fragment {
                                 //  moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
                             }
 
-                            if (moisture_air_dif < -3) {
+                            if (moisture_soil_dif < -3) {
                                 alert(moisture_soil_card);
                                 //  moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
 
-                            } else if (moisture_air_dif > 3) {
+                            } else if (moisture_soil_dif > 3) {
                                 alert(moisture_soil_card);
                                 //  moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
                             }
