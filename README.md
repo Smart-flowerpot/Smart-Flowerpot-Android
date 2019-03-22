@@ -79,3 +79,4 @@ Detailed as following;
 <h2> Instructions of use (Direct apk)</h2>
 <h4> 1- Below find the link of apk </h4>
 <h4> 2- Simply install apk on your mobile phone by finding apk and clicking on on your mobile phone </h4>
+<a href="https://github.com/Smart-flowerpot/Smart-Flowerpot-Android/blob/master/app-debug.apk"> Apk </a>
