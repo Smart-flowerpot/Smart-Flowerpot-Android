@@ -58,9 +58,8 @@ Uygulama tamamiyle kullanıcı dostu ve basit bir arayüz kullanılarak tasarlan
 <h1>Smart Flowerpot Projesi Nasıl Çalışır ?</h1>
 Projenin çalışma prensibi alttaki şekilde detaylı olarak gösterilmiştir.
 
-
-<img src="https://github.com/Smart-flowerpot/Smart-Flowerpot-Arduino/blob/master/Schema1.png" />
-<img src="https://github.com/Smart-flowerpot/Smart-Flowerpot-Arduino/blob/master/Schema3.png" />
+<h2> In app images </h2>
+<img src="https://github.com/Smart-flowerpot/Smart-Flowerpot-Android/blob/master/Overall.png" />
 
 <h2> Instructions of use </h2>
 <h4> 1- Download project and open it in Android Studio or simple clone it in Androis Studio terminal </h4>
