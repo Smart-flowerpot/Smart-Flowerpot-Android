@@ -7,11 +7,5 @@
         android:title=""
         yourapp:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_more"
-        android:icon="@drawable/ic_more_vert_black_24dp"
-        android:title=""
-        yourapp:showAsAction="ifRoom" />
-
     ...
 </menu>

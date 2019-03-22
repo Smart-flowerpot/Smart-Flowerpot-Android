@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
         setActionBar();
         List<Plant> p_list = new ArrayList<>();
         Plant a = new Plant();

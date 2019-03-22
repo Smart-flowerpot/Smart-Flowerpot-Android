@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -105,6 +106,7 @@ public class PlantFragment extends Fragment {
 
     View view;
     private final MemoryPersistence persistence = new MemoryPersistence();
+    MqttAndroidClient client;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -113,7 +115,6 @@ public class PlantFragment extends Fragment {
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         connect();
-        setPlant();
         openGame();
         openStats();
         setActionBar("Plant 1");
@@ -124,10 +125,10 @@ public class PlantFragment extends Fragment {
         editor.commit();
 
 
-
-
         return view;
     }
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -139,8 +140,6 @@ public class PlantFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_plant_back) {
             getFragmentManager().popBackStackImmediate();
-        } else if (item.getItemId() == R.id.action_more) {
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -176,59 +175,15 @@ public class PlantFragment extends Fragment {
                 .fromHtml("<font style='align:center' color='#808080'>" + name + "</font>"));
     }
 
-    private void setPlant() {
 
-
-
-        /*
-        ManagerAll.getInstance().getPlant(1).enqueue(new Callback<Plant>() {
-            @Override
-            public void onResponse(Call<Plant> call, final Response<Plant> response) {
-                if (response.isSuccessful()) {
-                    setActionBar(response.body().getName());
-                    temperature.setText(response.body().getTemperature() + " °C");
-                    light.setText(((response.body().getLight() * 100 / 1024)) + "%");
-                    moisture.setText(response.body().getMoisture_air() + "%");
-                    moisture_soil.setText(response.body().getMoisture_soil() + "%");
-
-                    checkPlantStatus(response.body().getType());
-
-                    water.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            ManagerAll.getInstance().updateWaterStatus(response.body().getPlant_id(), 1).enqueue(new Callback<com.omer.user.smartflowerpot.Models.Response>() {
-                                @Override
-                                public void onResponse(Call<com.omer.user.smartflowerpot.Models.Response> call, Response<com.omer.user.smartflowerpot.Models.Response> response) {
-                                    if (response.isSuccessful() && response.body().getResponse().equalsIgnoreCase("S")) {
-                                        Toast.makeText(getContext(), "You watered your plant :)", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<com.omer.user.smartflowerpot.Models.Response> call, Throwable t) {
-
-                                }
-                            });
-                        }
-                    });
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Plant> call, Throwable t) {
-
-            }
-        });*/
-    }
 
     private void checkPlantStatus(final String plant_type) {
-        ManagerAll.getInstance().getConstantPlantData().enqueue(new Callback<Result>() {
+        /*ManagerAll.getInstance().getConstantPlantData().enqueue(new Callback<Result>() {
             @Override
             public void onResponse(Call<Result> call, Response<Result> response) {
                 if (response.isSuccessful()) {
                     for (final ArrayItem p : response.body().getArray()) {
-                        Log.i("ö", p.getName());
+
                         if (p.getName().equalsIgnoreCase(plant_type)) {
 
                             int temp_dif = Integer.parseInt(p.getOptimal_temperature()) -
@@ -325,10 +280,103 @@ public class PlantFragment extends Fragment {
             public void onFailure(Call<Result> call, Throwable t) {
                 Log.i("Error", t.getMessage());
             }
+        });*/
+
+        int temp_dif = 27 -
+                Integer.parseInt(temperature.getText().toString().substring(0, temperature.getText().toString().indexOf(" ")));
+        int moisture_dif = 50 -
+                Integer.parseInt(moisture.getText().toString().substring(0, moisture.getText().toString().indexOf("%")));
+        int moisture_soil_dif = 52 -
+                Integer.parseInt(moisture_soil.getText().toString().substring(0, moisture_soil.getText().toString().indexOf("%")));
+
+        info_moisture.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Air moisture information");
+                builder.setMessage("Current air moisture: " + moisture.getText().toString() + "\n" +
+                        "Ideal air moisture: " + 50 + "%");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+            }
         });
+
+        info_moisture_soil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Soil moisture information");
+                builder.setMessage("Current soil moisture: " + moisture_soil.getText().toString() + "\n" +
+                        "Ideal soil moisture: " + 52 + "%");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+            }
+        });
+
+        info_temp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Temperature information");
+                builder.setMessage("Current temperature: " + temperature.getText().toString() + "\n" +
+                        "Ideal temperature: " +27 + " °C");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }).show();
+            }
+        });
+
+        if (temp_dif < -3) {
+            alert(temperature_card);
+            //  temperature_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+
+        } else if (temp_dif > 3) {
+            alert(temperature_card);
+
+            //  temperature_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+        }
+
+        if (moisture_dif < -3) {
+            alert(moisture_card);
+            //  moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+
+        } else if (moisture_dif > 3) {
+            alert(moisture_card);
+            //  moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+        }
+
+        if (moisture_soil_dif < -3) {
+            alert(moisture_soil_card);
+            //  moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+
+        } else if (moisture_soil_dif > 3) {
+            alert(moisture_soil_card);
+            //  moisture_card.setCardBackgroundColor(Color.parseColor("#F32222"));
+        }
 
     }
 
+    private void disconnect() {
+        try {
+            client.disconnect();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        client.unregisterResources();
+    }
 
     private void alert(final CardView temp_card) {
         final int[] i = {0};
@@ -348,16 +396,25 @@ public class PlantFragment extends Fragment {
         handler.postDelayed(runnable, 1000);
     }
 
+
     public void connect() {
 
-        String clientId = MqttClient.generateClientId();
-        final MqttAndroidClient client = new MqttAndroidClient(getActivity(), "tcp://m24.cloudmqtt.com:16309",
+        String clientId = MqttAsyncClient.generateClientId();
+        client = new MqttAndroidClient(getActivity(), "tcp://m24.cloudmqtt.com:16309",
                 clientId, persistence);
+
+
+        MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
+        mqttConnectOptions.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1);
+        mqttConnectOptions.setUserName("cissktzx");
+        mqttConnectOptions.setPassword("ETUpXfdiWfMO".toCharArray());
+        mqttConnectOptions.setCleanSession(true);
 
         client.setCallback(new MqttCallback() {
             @Override
             public void connectionLost(Throwable cause) {
-                Log.i("ö", "Connection was lost!");
+                Log.i("ö", cause.getMessage());
+
             }
 
             @Override
@@ -378,7 +435,9 @@ public class PlantFragment extends Fragment {
 
                     }
 
-                    moisture_soil.setText(m_soil + "%");
+                    int m_soil_v = Integer.parseInt(m_soil);
+                    m_soil_v = m_soil_v * 100 / 1024;
+                    moisture_soil.setText(m_soil_v + "%");
                     moisture.setText(m_air + "%");
                     temperature.setText(temp + " °C");
                     freeze.setText(frostbite);
@@ -393,18 +452,13 @@ public class PlantFragment extends Fragment {
             }
         });
 
-        MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
-        mqttConnectOptions.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1);
-        mqttConnectOptions.setUserName("cissktzx");
-        mqttConnectOptions.setPassword("ETUpXfdiWfMO".toCharArray());
-        mqttConnectOptions.setCleanSession(true);
-
         try {
             client.connect(mqttConnectOptions, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Log.i("ö", "Connection Success!");
                     try {
+
                         client.subscribe("sensorler", 0);
 
                         water.setOnClickListener(new View.OnClickListener() {
@@ -447,87 +501,7 @@ public class PlantFragment extends Fragment {
         }
 
 
-       /* String clientId = MqttClient.generateClientId();
-        final MqttAndroidClient client = new MqttAndroidClient(getActivity(), "http://m24.cloudmqtt.com:16309",
-                clientId);
 
-        MqttConnectOptions options = new MqttConnectOptions();
-        options.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1);
-        options.setCleanSession(true);
-        options.setUserName("cissktzx");
-        options.setPassword("ETUpXfdiWfMO".toCharArray());
-        options.setAutomaticReconnect(true);
-
-
-        try {
-            IMqttToken token = client.connect(options);
-            if (client.isConnected()) {
-                token.setActionCallback(new IMqttActionListener() {
-                    @Override
-                    public void onSuccess(IMqttToken asyncActionToken) {
-                        subscribe(client, "toprakNem");
-                        subscribe(client, "havaNem");
-                        subscribe(client, "havaIsi");
-
-                        publish(client, "led", "1");
-
-                        water.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Log.i("ö", "watered");
-                                publish(client, "motor", "1");
-                            }
-                        });
-
-                        client.setCallback(new MqttCallback() {
-                            @Override
-                            public void connectionLost(Throwable cause) {
-                                Log.i("ö", cause.getMessage().toString());
-                            }
-
-                            @Override
-                            public void messageArrived(String topic, MqttMessage message) throws Exception {
-
-                                Log.i("ö", topic.toString());
-                                if (topic.equals("toprakNem")) {
-                                    moisture_soil.setText(message.getPayload().toString());
-                                }
-
-                                if (topic.equals("havaNem")) {
-                                    moisture.setText(message.getPayload().toString());
-                                }
-
-                                if (topic.equals("havaIsi")) {
-                                    temperature.setText(message.getPayload().toString());
-                                }
-
-                            }
-
-                            @Override
-                            public void deliveryComplete(IMqttDeliveryToken token) {
-                                try {
-                                    Log.i("ö", token.getMessage().toString());
-                                } catch (MqttException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-                        // Something went wrong e.g. connection timeout or firewall problems
-                        Log.i("ö", "onFailure");
-
-                    }
-
-
-                });
-            } else
-                Log.i("ö", "not connected");
-        } catch (MqttException e) {
-            Log.i("ö", e.getMessage().toString());
-        }*/
     }
 
 }

@@ -175,13 +175,13 @@
                         android:textSize="20dp" />
 
                     <ImageView
-                        android:id="@+id/info_freeze"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_margin="15dp"
-                        android:layout_weight="0.8"
-                        android:background="@drawable/ic_info_black_24dp"
-                        android:visibility="visible" />
+                    android:id="@+id/info_freeze"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="15dp"
+                    android:layout_weight="0.8"
+                    android:background="@drawable/ic_info_black_24dp"
+                    android:visibility="invisible" />
 
                 </LinearLayout>
             </LinearLayout>

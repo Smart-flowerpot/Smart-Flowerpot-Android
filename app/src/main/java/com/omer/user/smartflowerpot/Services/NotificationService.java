@@ -55,7 +55,7 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         connect();
-        return START_REDELIVER_INTENT;
+        return START_STICKY;
     }
 
     public void connect() {
@@ -103,16 +103,16 @@ public class NotificationService extends Service {
 
                                 editor.commit();
 
+                                Log.i("ü", "entered");
                             }
-                        },0,1000*60);
-
+                        }, 0, 1000 * 60 * 30);
 
                         new Timer().scheduleAtFixedRate(new TimerTask() {
                             @Override
                             public void run() {
                                 checkPlantStatus("Amaryllis", data);
                             }
-                        },0,1000*60*60);
+                        }, 1000, 1000 * 60 * 60 * 2);
 
 
 

@@ -25,6 +25,8 @@ import org.eclipse.paho.client.mqttv3.MqttToken;
 
 public class MainActivity extends AppCompatActivity {
 
+    //static  MqttAndroidClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

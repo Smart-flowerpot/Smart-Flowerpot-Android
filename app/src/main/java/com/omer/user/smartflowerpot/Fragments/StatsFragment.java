@@ -59,16 +59,19 @@ public class StatsFragment extends Fragment {
         String[] m_air = sharedPref.getString("m_air", "").split(",");
         String[] m_soil = sharedPref.getString("m_soil", "").split(",");
 
-        Log.i("ü", sharedPref.getString("temp", ""));
+        // Log.i("ü", sharedPref.getString("temp", ""));
 
-        Log.i("ü", sharedPref.getString("m_air", ""));
+        // Log.i("ü", sharedPref.getString("m_air", ""));
 
-        Log.i("ü", sharedPref.getString("m_soil", ""));
+        // Log.i("ü", sharedPref.getString("m_soil", ""));
 
+        try {
+            setTemperatureChart(temp);
+            setMoistureAirChart(m_air);
+            setMoistureSoilChart(m_soil);
+        } catch (Exception e) {
 
-        setTemperatureChart(temp);
-        setMoistureAirChart(m_air);
-        setMoistureSoilChart(m_soil);
+        }
 
         return view;
     }
@@ -113,18 +116,18 @@ public class StatsFragment extends Fragment {
 
     private void setMoistureSoilChart(String[] data) {
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
-                new DataPoint(1, Integer.parseInt(data[data.length - 12])),
-                new DataPoint(2, Integer.parseInt(data[data.length - 11])),
-                new DataPoint(3, Integer.parseInt(data[data.length - 10])),
-                new DataPoint(4, Integer.parseInt(data[data.length - 9])),
-                new DataPoint(5, Integer.parseInt(data[data.length - 8])),
-                new DataPoint(6, Integer.parseInt(data[data.length - 7])),
-                new DataPoint(7, Integer.parseInt(data[data.length - 6])),
-                new DataPoint(8, Integer.parseInt(data[data.length - 5])),
-                new DataPoint(9, Integer.parseInt(data[data.length - 4])),
-                new DataPoint(10, Integer.parseInt(data[data.length - 3])),
-                new DataPoint(11, Integer.parseInt(data[data.length - 2])),
-                new DataPoint(12, Integer.parseInt(data[data.length - 1]))
+                new DataPoint(1, Integer.parseInt(data[data.length - 12]) * 100 / 1024),
+                new DataPoint(2, Integer.parseInt(data[data.length - 11]) * 100 / 1024),
+                new DataPoint(3, Integer.parseInt(data[data.length - 10]) * 100 / 1024),
+                new DataPoint(4, Integer.parseInt(data[data.length - 9]) * 100 / 1024),
+                new DataPoint(5, Integer.parseInt(data[data.length - 8]) * 100 / 1024),
+                new DataPoint(6, Integer.parseInt(data[data.length - 7]) * 100 / 1024),
+                new DataPoint(7, Integer.parseInt(data[data.length - 6]) * 100 / 1024),
+                new DataPoint(8, Integer.parseInt(data[data.length - 5]) * 100 / 1024),
+                new DataPoint(9, Integer.parseInt(data[data.length - 4]) * 100 / 1024),
+                new DataPoint(10, Integer.parseInt(data[data.length - 3]) * 100 / 1024),
+                new DataPoint(11, Integer.parseInt(data[data.length - 2]) * 100 / 1024),
+                new DataPoint(12, Integer.parseInt(data[data.length - 1]) * 100 / 1024)
         });
         lineChart_m_s.addSeries(series);
     }
