@@ -20,6 +20,8 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.omer.user.smartflowerpot.R;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.omer.user.smartflowerpot.Activities.MainActivity.current_f;
 
 public class StatsFragment extends Fragment {
 
@@ -49,6 +53,8 @@ public class StatsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_stats, container, false);
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
+
+        current_f = "stats";
 
         SharedPreferences sharedPref;
         DateFormat df = new SimpleDateFormat("dd");

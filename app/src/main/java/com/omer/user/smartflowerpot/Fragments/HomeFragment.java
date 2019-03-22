@@ -26,6 +26,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.omer.user.smartflowerpot.Activities.MainActivity.current_f;
+
 
 public class HomeFragment extends Fragment {
 
@@ -45,6 +47,7 @@ public class HomeFragment extends Fragment {
         ButterKnife.bind(this, view);
         setHasOptionsMenu(false);
         setActionBar();
+        current_f = "home";
         List<Plant> p_list = new ArrayList<>();
         Plant a = new Plant();
         a.setName("Plant 1");

@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -21,14 +22,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+import com.omer.user.smartflowerpot.Adapters.AchievementsAdapter;
+import com.omer.user.smartflowerpot.Models.AchievementlistItem;
 import com.omer.user.smartflowerpot.Models.ArrayItem;
 import com.omer.user.smartflowerpot.Models.Plant;
 import com.omer.user.smartflowerpot.Models.Result;
 import com.omer.user.smartflowerpot.R;
 import com.omer.user.smartflowerpot.RestApi.ManagerAll;
+import com.omer.user.smartflowerpot.Utility;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -45,22 +53,35 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PlantFragment extends Fragment {
 
-    @BindView(R.id.game)
-    ImageView game;
+    @OnClick(R.id.game)
+    public void scrollGame() {
+        focusOnView(ac_text);
+    }
 
-    @BindView(R.id.stats)
-    ImageView stats;
+    @OnClick(R.id.stats)
+    public void scrollStats() {
+        focusOnView(stats_text);
+    }
+
+    @BindView(R.id.achievements_text)
+    TextView ac_text;
+
+    @BindView(R.id.a)
+    NestedScrollView nestedScrollView;
 
     @BindView(R.id.value_moisture)
     TextView moisture;
@@ -104,6 +125,30 @@ public class PlantFragment extends Fragment {
     @BindView(R.id.water_me_text)
     TextView water_me_text;
 
+
+    @BindView(R.id.graph_m_a)
+    GraphView lineChart_m_a;
+
+    @BindView(R.id.graph_m_s)
+    GraphView lineChart_m_s;
+
+    @BindView(R.id.graph_t)
+    GraphView lineChart_t;
+
+
+    @BindView(R.id.achievements)
+    ListView achievements;
+
+    @BindView(R.id.points)
+    TextView points;
+
+    @BindView(R.id.stats_text)
+    TextView stats_text;
+
+    private AchievementsAdapter achievementsAdapter;
+    private List<AchievementlistItem> list;
+
+
     View view;
     private final MemoryPersistence persistence = new MemoryPersistence();
     MqttAndroidClient client;
@@ -115,20 +160,126 @@ public class PlantFragment extends Fragment {
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         connect();
-        openGame();
-        openStats();
+        // openGame();
+        //openStats();
         setActionBar("Plant 1");
+        setStats();
+        setAchievements();
 
         SharedPreferences sharedPref = getContext().getSharedPreferences("achievements", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("takecare", sharedPref.getInt("takecare", 0) + 1);
         editor.commit();
 
-
         return view;
     }
 
+    private void setAchievements() {
+        SharedPreferences sharedPref = getContext().getSharedPreferences("achievements", Context.MODE_PRIVATE);
 
+        if (sharedPref.getInt("water", 0) >= 5)
+            points.setText("Points: 10");
+
+        if (sharedPref.getInt("takecare", 0) >= 10)
+            points.setText("Points: 10");
+
+        if (sharedPref.getInt("water", 0) >= 5 && sharedPref.getInt("takecare", 0) >= 10)
+            points.setText("Points: 20");
+
+        list = new ArrayList<>();
+        list.add(new AchievementlistItem("Water 5 Times In Total", "10 points", "0"));
+        list.add(new AchievementlistItem("Take Care Of 2 Plants At The Same Time", "20 points", "0"));
+        list.add(new AchievementlistItem("Keep A Plant In A Healthy Condition For 2 Days", "10 points", "0"));
+        list.add(new AchievementlistItem("Take Care Of A Cactus", "20 points", "0"));
+        list.add(new AchievementlistItem("Collect 5 Experience Points", "10 points", "0"));
+        list.add(new AchievementlistItem("Check The Condition Of Your Plants 10 Times", "10 points", "0"));
+        achievementsAdapter = new AchievementsAdapter(getActivity(), list, getFragmentManager());
+        achievements.setAdapter(achievementsAdapter);
+        Utility.setListViewHeightBasedOnChildren(achievements);
+    }
+
+    private void setStats() {
+        SharedPreferences sharedPref;
+
+        sharedPref = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE);
+
+        String[] temp = sharedPref.getString("temp", "").split(",");
+        String[] m_air = sharedPref.getString("m_air", "").split(",");
+        String[] m_soil = sharedPref.getString("m_soil", "").split(",");
+
+        try {
+            setTemperatureChart(temp);
+            setMoistureAirChart(m_air);
+            setMoistureSoilChart(m_soil);
+        } catch (Exception e) {
+
+        }
+    }
+
+    private final void focusOnView(final View view) {
+        nestedScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                nestedScrollView.scrollTo(0, view.getBottom()+800);
+            }
+        });
+    }
+
+    private void setTemperatureChart(String[] data) {
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
+                new DataPoint(1, Integer.parseInt(data[data.length - 12])),
+                new DataPoint(2, Integer.parseInt(data[data.length - 11])),
+                new DataPoint(3, Integer.parseInt(data[data.length - 10])),
+                new DataPoint(4, Integer.parseInt(data[data.length - 9])),
+                new DataPoint(5, Integer.parseInt(data[data.length - 8])),
+                new DataPoint(6, Integer.parseInt(data[data.length - 7])),
+                new DataPoint(7, Integer.parseInt(data[data.length - 6])),
+                new DataPoint(8, Integer.parseInt(data[data.length - 5])),
+                new DataPoint(9, Integer.parseInt(data[data.length - 4])),
+                new DataPoint(10, Integer.parseInt(data[data.length - 3])),
+                new DataPoint(11, Integer.parseInt(data[data.length - 2])),
+                new DataPoint(12, Integer.parseInt(data[data.length - 1]))
+        });
+
+        lineChart_t.addSeries(series);
+    }
+
+    private void setMoistureAirChart(String[] data) {
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
+                new DataPoint(1, Integer.parseInt(data[data.length - 12])),
+                new DataPoint(2, Integer.parseInt(data[data.length - 11])),
+                new DataPoint(3, Integer.parseInt(data[data.length - 10])),
+                new DataPoint(4, Integer.parseInt(data[data.length - 9])),
+                new DataPoint(5, Integer.parseInt(data[data.length - 8])),
+                new DataPoint(6, Integer.parseInt(data[data.length - 7])),
+                new DataPoint(7, Integer.parseInt(data[data.length - 6])),
+                new DataPoint(8, Integer.parseInt(data[data.length - 5])),
+                new DataPoint(9, Integer.parseInt(data[data.length - 4])),
+                new DataPoint(10, Integer.parseInt(data[data.length - 3])),
+                new DataPoint(11, Integer.parseInt(data[data.length - 2])),
+                new DataPoint(12, Integer.parseInt(data[data.length - 1]))
+        });
+        lineChart_m_a.addSeries(series);
+
+    }
+
+    private void setMoistureSoilChart(String[] data) {
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
+                new DataPoint(1, Integer.parseInt(data[data.length - 12]) * 100 / 1024),
+                new DataPoint(2, Integer.parseInt(data[data.length - 11]) * 100 / 1024),
+                new DataPoint(3, Integer.parseInt(data[data.length - 10]) * 100 / 1024),
+                new DataPoint(4, Integer.parseInt(data[data.length - 9]) * 100 / 1024),
+                new DataPoint(5, Integer.parseInt(data[data.length - 8]) * 100 / 1024),
+                new DataPoint(6, Integer.parseInt(data[data.length - 7]) * 100 / 1024),
+                new DataPoint(7, Integer.parseInt(data[data.length - 6]) * 100 / 1024),
+                new DataPoint(8, Integer.parseInt(data[data.length - 5]) * 100 / 1024),
+                new DataPoint(9, Integer.parseInt(data[data.length - 4]) * 100 / 1024),
+                new DataPoint(10, Integer.parseInt(data[data.length - 3]) * 100 / 1024),
+                new DataPoint(11, Integer.parseInt(data[data.length - 2]) * 100 / 1024),
+                new DataPoint(12, Integer.parseInt(data[data.length - 1]) * 100 / 1024)
+        });
+        lineChart_m_s.addSeries(series);
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -144,7 +295,7 @@ public class PlantFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void openGame() {
+    /*private void openGame() {
         game.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,14 +319,29 @@ public class PlantFragment extends Fragment {
                         .commit();
             }
         });
-    }
+    }*/
 
     private void setActionBar(String name) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(Html
                 .fromHtml("<font style='align:center' color='#808080'>" + name + "</font>"));
     }
 
+   /* @Override
+    public void onResume() {
+        super.onResume();
+            connect();
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            client.disconnect();
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }*/
 
     private void checkPlantStatus(final String plant_type) {
         /*ManagerAll.getInstance().getConstantPlantData().enqueue(new Callback<Result>() {
@@ -328,7 +494,7 @@ public class PlantFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Temperature information");
                 builder.setMessage("Current temperature: " + temperature.getText().toString() + "\n" +
-                        "Ideal temperature: " +27 + " °C");
+                        "Ideal temperature: " + 27 + " °C");
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -413,7 +579,6 @@ public class PlantFragment extends Fragment {
         client.setCallback(new MqttCallback() {
             @Override
             public void connectionLost(Throwable cause) {
-                Log.i("ö", cause.getMessage());
 
             }
 
@@ -499,7 +664,6 @@ public class PlantFragment extends Fragment {
         } catch (MqttException ex) {
             Log.i("ö", ex.toString());
         }
-
 
 
     }

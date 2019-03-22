@@ -22,6 +22,8 @@ import com.omer.user.smartflowerpot.Models.AllachievementsItem;
 import com.omer.user.smartflowerpot.R;
 import com.omer.user.smartflowerpot.RestApi.ManagerAll;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,8 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.omer.user.smartflowerpot.Activities.MainActivity.current_f;
 
 
 public class GameFragment extends Fragment {
@@ -53,6 +57,8 @@ public class GameFragment extends Fragment {
         setHasOptionsMenu(true);
         setSettingsOptions();
 
+        current_f = "game";
+
         SharedPreferences sharedPref = getContext().getSharedPreferences("achievements", Context.MODE_PRIVATE);
 
         if (sharedPref.getInt("water", 0) >= 5)
@@ -63,6 +69,7 @@ public class GameFragment extends Fragment {
 
         if(sharedPref.getInt("water", 0) >= 5 && sharedPref.getInt("takecare", 0) >= 10)
             points.setText("Points: 20");
+
 
         return view;
     }
