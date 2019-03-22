@@ -53,8 +53,6 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.ViewHolder
         @BindView(R.id.name)
         TextView name;
 
-        @BindView(R.id.status)
-        TextView status;
 
         @BindView(R.id.type)
         TextView type;

@@ -45,6 +45,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -116,6 +117,15 @@ public class PlantFragment extends Fragment {
         openGame();
         openStats();
         setActionBar("Plant 1");
+
+        SharedPreferences sharedPref = getContext().getSharedPreferences("achievements", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("takecare", sharedPref.getInt("takecare", 0) + 1);
+        editor.commit();
+
+
+
+
         return view;
     }
 
@@ -408,6 +418,12 @@ public class PlantFragment extends Fragment {
                                         Toast.makeText(getContext(), "You watered your plant :)", Toast.LENGTH_SHORT).show();
                                         client.publish("motor", new MqttMessage("0".getBytes()));
                                         water_me_text.setText("Water me");
+
+                                        SharedPreferences sharedPref = getContext().getSharedPreferences("achievements", Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPref.edit();
+                                        editor.putInt("water", sharedPref.getInt("water", 0) + 1);
+                                        editor.commit();
+
                                     }
                                 } catch (MqttException e) {
                                     e.printStackTrace();

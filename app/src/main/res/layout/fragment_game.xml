@@ -6,5 +6,44 @@
     android:background="#f2e6d9"
     tools:context=".Fragments.GameFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Points: 0"
+            android:id="@+id/points"
+            android:background="#EC5151"
+            android:textSize="20dp"
+            android:padding="10dp"
+            android:gravity="center"
+            android:textColor="#ffffff"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:padding="10dp"
+            android:text="Achievements"
+            android:textStyle="bold"/>
+
+        <View
+            android:layout_width="200dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:background="#c0c0c0"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:id="@+id/achievements"
+            android:layout_height="match_parent"></ListView>
+
+    </LinearLayout>
+
+
 
 </FrameLayout>

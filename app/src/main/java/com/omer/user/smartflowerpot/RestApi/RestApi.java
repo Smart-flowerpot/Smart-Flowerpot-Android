@@ -1,5 +1,6 @@
 package com.omer.user.smartflowerpot.RestApi;
 
+import com.omer.user.smartflowerpot.Models.AllachievementsItem;
 import com.omer.user.smartflowerpot.Models.Plant;
 import com.omer.user.smartflowerpot.Models.Response;
 import com.omer.user.smartflowerpot.Models.Result;
@@ -25,5 +26,8 @@ public interface RestApi {
 
     @GET("send_notification.php")
     Call<Response> sendNotification(@Query("message") String message);
+
+    @GET("achievements.json")
+    Call<AllachievementsItem> getAchievements();
 }
 

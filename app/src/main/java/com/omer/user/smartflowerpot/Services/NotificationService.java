@@ -90,21 +90,21 @@ public class NotificationService extends Service {
                         final String finalTemp = temp;
                         final String finalFrostbite = frostbite;
 
-                        final int[] i = {1};
 
                         new Timer().scheduleAtFixedRate(new TimerTask() {
                             @Override
                             public void run() {
                                 SharedPreferences sharedPref = getApplication().getSharedPreferences("data", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPref.edit();
-                                editor.putString(i[0]+"", finalM_soil + "," + finalM_air + "," + finalTemp + "," + finalFrostbite);
-                                editor.commit();
-                                i[0]--;
 
-                                if(i[0] == 12)
-                                    i[0] = 1;
+                                editor.putString("temp", sharedPref.getString("temp", "0,") + finalTemp + ",");
+                                editor.putString("m_air", sharedPref.getString("m_air", "0,") + finalM_air + ",");
+                                editor.putString("m_soil", sharedPref.getString("m_soil", "0,") + finalM_soil + ",");
+
+                                editor.commit();
+
                             }
-                        },0,1000*60*60*2);
+                        },0,1000*60);
 
 
                         new Timer().scheduleAtFixedRate(new TimerTask() {
@@ -173,7 +173,7 @@ public class NotificationService extends Service {
                             int moisture_dif = Math.abs(Integer.parseInt(data[1]) - Integer.parseInt(p.getOptimal_moisture()));
                             int moisture_soil_dif = Math.abs(Integer.parseInt(data[0]) - Integer.parseInt(p.getOptimal_moisture_soil()));
 
-                            if (temp_dif < 3) {
+                            if (temp_dif > 3) {
 
                                 ManagerAll.getInstance().sendNotification("Temperature is critic.").enqueue(new Callback<com.omer.user.smartflowerpot.Models.Response>() {
                                     @Override
@@ -189,8 +189,8 @@ public class NotificationService extends Service {
 
                             }
 
-                            if (moisture_dif < 3) {
-                                Toast.makeText(getApplicationContext(), " sfsfs", Toast.LENGTH_SHORT).show();
+                            if (moisture_dif > 3) {
+
                                 ManagerAll.getInstance().sendNotification("Air moisture is critic.").enqueue(new Callback<com.omer.user.smartflowerpot.Models.Response>() {
                                     @Override
                                     public void onResponse(Call<com.omer.user.smartflowerpot.Models.Response> call, Response<com.omer.user.smartflowerpot.Models.Response> response) {
@@ -204,7 +204,7 @@ public class NotificationService extends Service {
                                 });
 
                             }
-                            if (moisture_soil_dif < 3) {
+                            if (moisture_soil_dif > 3) {
                                 ManagerAll.getInstance().sendNotification("Soil moisture is critic.").enqueue(new Callback<com.omer.user.smartflowerpot.Models.Response>() {
                                     @Override
                                     public void onResponse(Call<com.omer.user.smartflowerpot.Models.Response> call, Response<com.omer.user.smartflowerpot.Models.Response> response) {

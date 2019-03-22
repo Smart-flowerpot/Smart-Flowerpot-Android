@@ -1,5 +1,6 @@
 package com.omer.user.smartflowerpot.RestApi;
 
+import com.omer.user.smartflowerpot.Models.AllachievementsItem;
 import com.omer.user.smartflowerpot.Models.Plant;
 import com.omer.user.smartflowerpot.Models.Response;
 import com.omer.user.smartflowerpot.Models.Result;
@@ -31,6 +32,11 @@ public class ManagerAll extends BaseManager {
 
     public Call<Response> sendNotification(String message){
         Call<Response> call = getRestApiClient().sendNotification(message);
+        return call;
+    }
+
+    public Call<AllachievementsItem> getAchievements() {
+        Call<AllachievementsItem> call = getRestApiClient().getAchievements();
         return call;
     }
 }

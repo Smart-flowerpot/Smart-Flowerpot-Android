@@ -1,14 +1,23 @@
 package com.omer.user.smartflowerpot.Models;
 
-public class Response {
+import java.util.List;
 
-    private String response;
+public class Response{
+	private List<AllachievementsItem> allachievements;
 
-    public String getResponse() {
-        return response;
-    }
+	public void setAllachievements(List<AllachievementsItem> allachievements){
+		this.allachievements = allachievements;
+	}
 
-    public void setResponse(String response) {
-        this.response = response;
-    }
+	public List<AllachievementsItem> getAllachievements(){
+		return allachievements;
+	}
+
+	@Override
+ 	public String toString(){
+		return 
+			"Response{" + 
+			"allachievements = '" + allachievements + '\'' + 
+			"}";
+		}
 }

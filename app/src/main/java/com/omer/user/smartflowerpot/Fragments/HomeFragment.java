@@ -47,7 +47,8 @@ public class HomeFragment extends Fragment {
         setActionBar();
         List<Plant> p_list = new ArrayList<>();
         Plant a = new Plant();
-        a.setName("a");
+        a.setName("Plant 1");
+        a.setType("Amaryllis");
         p_list.add(a);
         fillList(p_list);
         return view;

@@ -6,12 +6,14 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
@@ -52,86 +54,77 @@ public class StatsFragment extends Fragment {
         DateFormat df = new SimpleDateFormat("dd");
 
         sharedPref = getActivity().getSharedPreferences("data", Context.MODE_PRIVATE);
-        int[] data_temp = new int[12];
-        int[] data_m_a = new int[12];
-        int[] data_m_s = new int[12];
 
-        try {
-            for (int i = 1; i < 13; i++)
-                data_temp[i - 1] = Integer.parseInt(sharedPref.getString(i + "", 0 + "").split(",")[2]);
+        String[] temp = sharedPref.getString("temp", "").split(",");
+        String[] m_air = sharedPref.getString("m_air", "").split(",");
+        String[] m_soil = sharedPref.getString("m_soil", "").split(",");
 
-            for (int i = 1; i < 13; i++)
-                data_m_a[i - 1] = Integer.parseInt(sharedPref.getString(i + "", 0 + "").split(",")[1]);
+        Log.i("ü", sharedPref.getString("temp", ""));
 
-            for (int i = 1; i < 13; i++)
-                data_m_s[i - 1] = Integer.parseInt(sharedPref.getString(i + "", 0 + "").split(",")[0]);
-        } catch (Exception e) {
+        Log.i("ü", sharedPref.getString("m_air", ""));
 
-        }
+        Log.i("ü", sharedPref.getString("m_soil", ""));
 
-        try {
 
-            setTemperatureChart(data_temp);
-            setMoistureAirChart(data_m_a);
-            setMoistureSoilChart(data_m_s);
-        } catch (Exception e) {
+        setTemperatureChart(temp);
+        setMoistureAirChart(m_air);
+        setMoistureSoilChart(m_soil);
 
-        }
         return view;
     }
 
-    private void setTemperatureChart(int[] data) {
+    private void setTemperatureChart(String[] data) {
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
-                new DataPoint(1, data[12]),
-                new DataPoint(2, data[12]),
-                new DataPoint(3, data[12]),
-                new DataPoint(4, data[12]),
-                new DataPoint(5, data[12]),
-                new DataPoint(6, data[12]),
-                new DataPoint(7, data[12]),
-                new DataPoint(8, data[12]),
-                new DataPoint(9, data[12]),
-                new DataPoint(10, data[12]),
-                new DataPoint(11, data[12]),
-                new DataPoint(12, data[12])
+                new DataPoint(1, Integer.parseInt(data[data.length - 12])),
+                new DataPoint(2, Integer.parseInt(data[data.length - 11])),
+                new DataPoint(3, Integer.parseInt(data[data.length - 10])),
+                new DataPoint(4, Integer.parseInt(data[data.length - 9])),
+                new DataPoint(5, Integer.parseInt(data[data.length - 8])),
+                new DataPoint(6, Integer.parseInt(data[data.length - 7])),
+                new DataPoint(7, Integer.parseInt(data[data.length - 6])),
+                new DataPoint(8, Integer.parseInt(data[data.length - 5])),
+                new DataPoint(9, Integer.parseInt(data[data.length - 4])),
+                new DataPoint(10, Integer.parseInt(data[data.length - 3])),
+                new DataPoint(11, Integer.parseInt(data[data.length - 2])),
+                new DataPoint(12, Integer.parseInt(data[data.length - 1]))
         });
 
         lineChart_t.addSeries(series);
     }
 
-    private void setMoistureAirChart(int[] data) {
+    private void setMoistureAirChart(String[] data) {
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
-                new DataPoint(1, data[12]),
-                new DataPoint(2, data[12]),
-                new DataPoint(3, data[12]),
-                new DataPoint(4, data[12]),
-                new DataPoint(5, data[12]),
-                new DataPoint(6, data[12]),
-                new DataPoint(7, data[12]),
-                new DataPoint(8, data[12]),
-                new DataPoint(9, data[12]),
-                new DataPoint(10, data[12]),
-                new DataPoint(11, data[12]),
-                new DataPoint(12, data[12])
+                new DataPoint(1, Integer.parseInt(data[data.length - 12])),
+                new DataPoint(2, Integer.parseInt(data[data.length - 11])),
+                new DataPoint(3, Integer.parseInt(data[data.length - 10])),
+                new DataPoint(4, Integer.parseInt(data[data.length - 9])),
+                new DataPoint(5, Integer.parseInt(data[data.length - 8])),
+                new DataPoint(6, Integer.parseInt(data[data.length - 7])),
+                new DataPoint(7, Integer.parseInt(data[data.length - 6])),
+                new DataPoint(8, Integer.parseInt(data[data.length - 5])),
+                new DataPoint(9, Integer.parseInt(data[data.length - 4])),
+                new DataPoint(10, Integer.parseInt(data[data.length - 3])),
+                new DataPoint(11, Integer.parseInt(data[data.length - 2])),
+                new DataPoint(12, Integer.parseInt(data[data.length - 1]))
         });
         lineChart_m_a.addSeries(series);
 
     }
 
-    private void setMoistureSoilChart(int[] data) {
+    private void setMoistureSoilChart(String[] data) {
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
-                new DataPoint(1, data[12]),
-                new DataPoint(2, data[12]),
-                new DataPoint(3, data[12]),
-                new DataPoint(4, data[12]),
-                new DataPoint(5, data[12]),
-                new DataPoint(6, data[12]),
-                new DataPoint(7, data[12]),
-                new DataPoint(8, data[12]),
-                new DataPoint(9, data[12]),
-                new DataPoint(10, data[12]),
-                new DataPoint(11, data[12]),
-                new DataPoint(12, data[12])
+                new DataPoint(1, Integer.parseInt(data[data.length - 12])),
+                new DataPoint(2, Integer.parseInt(data[data.length - 11])),
+                new DataPoint(3, Integer.parseInt(data[data.length - 10])),
+                new DataPoint(4, Integer.parseInt(data[data.length - 9])),
+                new DataPoint(5, Integer.parseInt(data[data.length - 8])),
+                new DataPoint(6, Integer.parseInt(data[data.length - 7])),
+                new DataPoint(7, Integer.parseInt(data[data.length - 6])),
+                new DataPoint(8, Integer.parseInt(data[data.length - 5])),
+                new DataPoint(9, Integer.parseInt(data[data.length - 4])),
+                new DataPoint(10, Integer.parseInt(data[data.length - 3])),
+                new DataPoint(11, Integer.parseInt(data[data.length - 2])),
+                new DataPoint(12, Integer.parseInt(data[data.length - 1]))
         });
         lineChart_m_s.addSeries(series);
     }
